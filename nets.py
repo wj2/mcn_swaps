@@ -25,3 +25,8 @@ class SimpleRNN(SimpleRecurrent):
 class SimpleLSTM(SimpleRecurrent):
     def __init__(self, *args, **kwargs):
         super(SimpleLSTM, self).__init__(*args, **kwargs, net_type=nn.LSTM)
+
+
+class SimpleGRU(SimpleRecurrent):
+    def __init__(self, *args, **kwargs):
+        super(SimpleGRU, self).__init__(*args, **kwargs, net_type=nn.GRU)
