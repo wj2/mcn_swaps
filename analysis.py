@@ -13,7 +13,7 @@ def sample_model_responses(task, model, n_samples=1000):
     for i, inp in enumerate(inputs):
         inp_use = torch.from_numpy(inp).type(torch.float).to(model.device)
         last_act = model(inp_use)[-1]
-        uv = msh.make_unit_vector(last_act.detach().numpy())
+        uv = msh.make_unit_vector(last_act.detach().cpu().numpy())
         resps[i] = msh.sincos_to_radian(*uv)
         targs[i] = info["target_color"][i]
         dists[i] = info["distractor_color"][i]
