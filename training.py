@@ -16,7 +16,7 @@ def train_model_on_task(
 ):
     dataset = ngym.Dataset(task, batch_size=batch_size, seq_len=seq_len)
     
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    device = model.device
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     running_loss = 0.0
