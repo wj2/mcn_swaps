@@ -32,6 +32,7 @@ def create_parser():
     parser.add_argument("--sigma", default=8, type=float)
     parser.add_argument("--num_steps", default=2000, type=int)
     parser.add_argument("--n_samples", default=5000, type=int)
+    parser.add_argument("--n_reps", default=10, type=int)
     return parser
 
 
@@ -49,19 +50,26 @@ if __name__ == "__main__":
 
     model_type = model_type_dict.get(args.model_type.upper())
     hidden_units = args.hidden_units
-
-    task = mst.RetrospectiveContinuousReportTask(sigma=args.sigma)
-    model = mstr.make_model_for_task(msn.SimpleRNN, task, hidden_units)
-
-    mstr.train_model_on_task(model, task, num_steps=args.num_steps)
-    
-
-    targs, dists, resps = msa.sample_model_responses(task, model, n_samples=args.n_samples)
     out_dict = {
-        "targets": targs,
-        "distractors": dists,
-        "responses": resps,
+        "targets": [],
+        "distractors": [],
+        "responses": [],
     }
+
+    for i in range(args.n_reps):    
+        task = mst.RetrospectiveContinuousReportTask(sigma=args.sigma)
+        model = mstr.make_model_for_task(msn.SimpleRNN, task, hidden_units)
+
+        mstr.train_model_on_task(model, task, num_steps=args.num_steps)    
+
+        targs, dists, resps = msa.sample_model_responses(
+            task, model, n_samples=args.n_samples,
+        )
+        out_dict["targets"].append(targs)
+        out_dict["distractors"].append(dists)
+        out_dict["responses"].append(resps)
+
+    out_dict = {k: np.stack(v, axis=0) for k, v in out_dict.items()}
     out_dict.update(vars(args))
     fn = args.output_template.format(
         model=args.model_type,
