@@ -1,10 +1,13 @@
 
+import torch
 import torch.nn as nn
 
 
 class SimpleRecurrent(nn.Module):
     def __init__(self, inp_size, num_h, out_size, net_type=nn.RNN):
         super(SimpleRecurrent, self).__init__()
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
         self.hidden_dim = num_h
         self.out_dim = out_size
         self.in_dim = inp_size
@@ -12,8 +15,8 @@ class SimpleRecurrent(nn.Module):
         self.linear = nn.Linear(num_h, out_size)
 
     def forward(self, x):
-        out, hidden = self.recurrent_net(x)
-        x = self.linear(out)
+        out, hidden = self.recurrent_net(x, device=self.device)
+        x = self.linear(out, device=self.device)
         return x
 
 
