@@ -18,6 +18,7 @@ def train_model_on_task(
     
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     criterion = nn.MSELoss()
+    list(p.to(device) for p in model.parameters().to(device))
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     running_loss = 0.0
     for i in range(num_steps):
