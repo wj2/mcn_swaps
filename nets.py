@@ -11,12 +11,12 @@ class SimpleRecurrent(nn.Module):
         self.hidden_dim = num_h
         self.out_dim = out_size
         self.in_dim = inp_size
-        self.recurrent_net = net_type(inp_size, num_h)
-        self.linear = nn.Linear(num_h, out_size)
+        self.recurrent_net = net_type(inp_size, num_h, device=self.device)
+        self.linear = nn.Linear(num_h, out_size, device=self.device)
 
     def forward(self, x):
-        out, hidden = self.recurrent_net(x, device=self.device)
-        x = self.linear(out, device=self.device)
+        out, hidden = self.recurrent_net(x)
+        x = self.linear(out)
         return x
 
 
