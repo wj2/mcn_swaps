@@ -3,6 +3,8 @@ import pickle
 from datetime import datetime
 import os
 
+import numpy as np
+
 import mcn_swaps.task as mst
 import mcn_swaps.training as mstr
 import mcn_swaps.nets as msn
