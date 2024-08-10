@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     for i in range(args.n_reps):    
         task = mst.RetrospectiveContinuousReportTask(sigma=args.sigma)
-        model = mstr.make_model_for_task(msn.SimpleRNN, task, hidden_units)
+        model = mstr.make_model_for_task(model_type, task, hidden_units)
 
         mstr.train_model_on_task(model, task, num_steps=args.num_steps)    
 
